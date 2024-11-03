@@ -24,7 +24,7 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   cuurentSilverPrice = 0;
   cuurentBronzePrice = 0;
   private intervalId: any;
-  user : any;
+  user : any = null;
 
   constructor(@Inject(PLATFORM_ID) platformId: Object,
       coinService: CoinService,
@@ -35,8 +35,11 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     this.isBrowser = isPlatformBrowser(platformId);
     this.coinService = coinService
     this.tradeLotService = traadeLotService
-    const user_storage = localStorage.getItem("user");
-    this.user = user_storage ? JSON.parse(user_storage) : null;
+    if (isPlatformBrowser(platformId)) {
+      const user_storage = localStorage.getItem("user");
+      this.user = user_storage ? JSON.parse(user_storage) : null;
+    }
+
   }
 
   

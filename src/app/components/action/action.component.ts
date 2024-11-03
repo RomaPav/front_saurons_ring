@@ -5,6 +5,8 @@ import { CoinService } from '../../services/coin.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PriceService } from '../../services/price.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-action',
@@ -24,7 +26,7 @@ export class ActionComponent implements OnInit, OnDestroy {
   cuurentSilverPrice = 0;
   cuurentBronzePrice = 0;
 
-  constructor(private route: ActivatedRoute, private bitService: BitService, private router: Router,private coinService: CoinService, private priceService: PriceService) { }
+  constructor(private route: ActivatedRoute, private bitService: BitService, private router: Router,private coinService: CoinService, private priceService: PriceService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   ngOnInit(): void {
     this.auctionId = this.route.snapshot.paramMap.get('id');
@@ -121,22 +123,30 @@ export class ActionComponent implements OnInit, OnDestroy {
     console.log(this.tradeInfo.trade_lot.trade_status);
     if (this.tradeInfo.trade_lot.trade_status != 'closed'){
       if(this.amount < this.tradeInfo.amount){
-        const user_storage = localStorage.getItem("user");
-        const user = user_storage ? JSON.parse(user_storage) : null;
-        this.tradeInfo.user_id = user.id
-        this.amount = this.tradeInfo.amount;
-        console.log(this.tradeInfo)
-        this.bitService.update(this.tradeInfo).subscribe({
-          next: (response) => {
-            console.log(response);
-          },
-          error: (error) => {
-            console.error('Помилка входу', error);
-          },
-          complete: () => {
-            console.log('Запит завершено аукціон');
-          }
-        });
+        let user = null
+        if (isPlatformBrowser(this.platformId)) {
+          const user_storage = localStorage.getItem("user");
+          user = user_storage ? JSON.parse(user_storage) : null;
+        }
+        if(user !=null){
+          this.tradeInfo.user_id = user.id
+          this.amount = this.tradeInfo.amount;
+          console.log(this.tradeInfo)
+          this.bitService.update(this.tradeInfo).subscribe({
+            next: (response) => {
+              console.log(response);
+            },
+            error: (error) => {
+              console.error('Помилка входу', error);
+            },
+            complete: () => {
+              console.log('Запит завершено аукціон');
+            }
+          });
+        }else{
+          console.log('локал сторедж не працює поки');
+        }
+
     }else{
       alert("Лот закрито, покупка з'явиться у Вашому профілі")
     }

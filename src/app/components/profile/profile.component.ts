@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { OrderService } from '../../services/order.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-profile',
@@ -12,12 +14,14 @@ import { OrderService } from '../../services/order.service';
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
-  user: any;
+  user: any = null;
   originalUser: any;
   purchases: any[] =[];
-  constructor(private userService: UserService, private orderService: OrderService){
-    const user_storage = localStorage.getItem("user");
-    this.user = user_storage ? JSON.parse(user_storage) : null;
+  constructor(private userService: UserService, private orderService: OrderService,@Inject(PLATFORM_ID) private platformId: Object){
+    if (isPlatformBrowser(this.platformId)) {
+      const user_storage = localStorage.getItem("user");
+      this.user = user_storage ? JSON.parse(user_storage) : null;
+    }
     this.originalUser = { ...this.user }; 
   }
 
@@ -56,7 +60,9 @@ export class ProfileComponent {
       this.originalUser = { ...this.user }; 
       this.hasChanges = false; 
       alert('Зміни збережено!'); 
-      localStorage.setItem("user", JSON.stringify(this.user))
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem("user", JSON.stringify(this.user))
+      }
      }else{
       alert('Заповніть всі поля'); 
      }

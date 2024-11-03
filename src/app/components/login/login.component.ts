@@ -5,6 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { User } from '../../model/user';
 import { Router } from '@angular/router';
 import { UserRole } from '../../model/enums/user_role';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +21,7 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
   authenticateService: AuthenticateService;
-  constructor(authenticateService: AuthenticateService, private router: Router){
+  constructor(authenticateService: AuthenticateService, private router: Router, @Inject(PLATFORM_ID) private platformId: Object){
     this.authenticateService =authenticateService;
   }
 
@@ -30,7 +32,9 @@ export class LoginComponent {
           const user: User = AuthenticateService.getUserFromJwt(response.access_token)
           console.log(user);
           this.navigate(user);
-          localStorage.setItem("user", JSON.stringify(user));
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem("user", JSON.stringify(user));
+          }
         },
         error: (error) => {
           console.error('Помилка входу', error);

@@ -20,7 +20,7 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   cuurentSilverPrice = 0;
   cuurentBronzePrice = 0;
   private intervalId: any;
-  user: any;
+  user: any = null;
   chart: any;
 
   constructor(private elementRef: ElementRef,
@@ -30,8 +30,10 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     private priceService: PriceService) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.tradeLotService = traadeLotService;
-    const user_storage = localStorage.getItem("user");
-    this.user = user_storage ? JSON.parse(user_storage) : null;
+    if (isPlatformBrowser(platformId)) {
+      const user_storage = localStorage.getItem("user");
+      this.user = user_storage ? JSON.parse(user_storage) : null;
+    }
   }
 
 
