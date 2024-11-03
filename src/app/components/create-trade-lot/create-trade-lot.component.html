@@ -1,0 +1,27 @@
+<div class="container">
+    <h2>Створення Лоту</h2>
+    <form (ngSubmit)="createTradeLot()" #tradeLotForm="ngForm">
+      <div class="form-group">
+        <label for="ringName">Назва Кільця:</label>
+        <input type="text" id="ringName" [(ngModel)]="coin.name" name="ringName" required />
+      </div>
+  
+      <div class="form-group">
+        <label for="goldPercentage">Процент Золота:</label>
+        <input type="number" id="goldPercentage" [(ngModel)]="coin.gold" name="goldPercentage" required min="0" max="100" />
+      </div>
+  
+      <div class="form-group">
+        <label for="silverPercentage">Процент Срібла:</label>
+        <input type="number" id="silverPercentage" [(ngModel)]="coin.silver" name="silverPercentage" required min="0" max="100" />
+      </div>
+  
+      <div class="form-group">
+        <label for="bronzePercentage">Процент Бронзи:</label>
+        <input type="number" id="bronzePercentage" [(ngModel)]="coin.bronze" name="bronzePercentage" required min="0" max="100" />
+      </div>
+  
+      <button type="submit" class="create-button">Створити</button>
+    </form>
+  </div>
+  

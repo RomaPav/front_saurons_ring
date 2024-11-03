@@ -1,0 +1,34 @@
+<header class="header">
+    <nav>
+      <a href="/profile" class="profile-link">Profile</a>
+    </nav>
+  </header>
+  
+  <main class="content">
+    <section class="price-chart">
+      <h2>Live Price Chart</h2>
+      <!-- <canvas *ngIf="isBrowser" id="priceChart"></canvas> -->
+      <h2>Gold {{cuurentGoldPrice}}</h2>
+      <h2>Silver {{cuurentSilverPrice}}</h2>
+      <h2>Bronze {{cuurentBronzePrice}}</h2>
+    </section>
+  
+    <section class="rings-section">
+      <h2>Rings for Sale</h2>
+      <div class="rings-grid">
+        <div *ngFor="let tradeLot of visibleRings" class="ring-card">
+          <img [src]="tradeLot.coin.image" alt="{{tradeLot.coin.name}}" />
+          <p>{{ tradeLot.coin.name }}</p>
+          <p>{{ tradeLot.coin.gold * this.cuurentGoldPrice + tradeLot.coin.silver * this.cuurentSilverPrice + tradeLot.coin.bronze * this.cuurentBronzePrice  | currency:'UAH':'symbol' }}</p>
+          <button *ngIf="tradeLot.trade_status == 'not_started'" (click)="startAuction(tradeLot)" class="auction-btn">
+            Start Auction
+          </button>
+          <button *ngIf="tradeLot.trade_status == 'started'" (click)="endAuction(tradeLot)" class="auction-btn">
+            End Auction
+          </button>
+        </div>
+      </div>
+  
+    </section>
+  </main>
+  

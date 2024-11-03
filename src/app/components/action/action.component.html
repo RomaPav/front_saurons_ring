@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="auction-item">
+      <button class="auction-btn" (click)="navigateToBack()">Назад</button>
+        <h2>{{coin.name}}</h2>
+        <p>Золото: {{coin.gold}}%</p>
+        <p>Срібло: {{coin.silver}}%</p>
+        <p>Бронза: {{coin.bronze}}%</p>
+        <p>Початкова ціна: {{coin.gold * this.cuurentGoldPrice + coin.silver * this.cuurentSilverPrice + coin.bronze * this.cuurentBronzePrice | currency:'UAH':'symbol'}}</p>
+        <p *ngIf="tradeInfo && tradeInfo.amount" >Поточна ставка: {{tradeInfo.amount}} грн</p>
+      
+        <h3>Ставка</h3>
+        <input *ngIf="tradeInfo && tradeInfo.amount" type="number" placeholder="Введіть вашу ставку" min="0.01" step="0.01"  [(ngModel)]="this.tradeInfo.amount"/>
+        <button (click)="updateAmount()">Підвищити ставку</button>
+ 
+      </div>
+</div>
+

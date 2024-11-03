@@ -1,0 +1,13 @@
+<div class="container">
+    <h2>Вибір Лоту</h2>
+    <div class="trade-lot-selection">
+        <p>Назва Лоту: {{ tradeLot.name }}</p>
+        
+        <label for="tradeStatus">Виберіть стан лоту:</label>
+        <select id="tradeStatus" [(ngModel)]="this.tradeInfo.trade_status">
+        <option *ngFor="let status of tradeStatuses" [value]="status">{{ status }}</option>
+        </select>
+        
+        <button class="save-button" (click)="saveTradeLot()">Зберегти</button>
+    </div>
+</div>

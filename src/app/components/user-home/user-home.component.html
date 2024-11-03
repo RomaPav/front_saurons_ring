@@ -1,0 +1,30 @@
+<header class="header">
+    <nav>
+      <a href="/profile" class="profile-link">Profile</a>
+    </nav>
+  </header>
+  <main class="content">
+    <section class="price-chart">
+      <h2>Live Price Chart</h2>
+      <!-- <canvas *ngIf="isBrowser" id="priceChart"></canvas> -->
+       <h2>Gold {{cuurentGoldPrice}}</h2>
+       <h2>Silver {{cuurentSilverPrice}}</h2>
+       <h2>Bronze {{cuurentBronzePrice}}</h2>
+    </section>
+  
+    <section class="rings-section">
+      <h2>Rings for Sale</h2>
+      <div class="rings-grid">
+        <div *ngFor="let tradeLot of visibleRings" class="ring-card" (click)="navigateToAuction(tradeLot.id)">
+          <img [src]="tradeLot.coin.image" alt="{{tradeLot.coin.name}}" />
+          <p>{{ tradeLot.coin.name }}</p>
+
+          <p>{{ tradeLot.coin.gold * this.cuurentGoldPrice + tradeLot.coin.silver * this.cuurentSilverPrice + tradeLot.coin.bronze * this.cuurentBronzePrice | currency:'UAH':'symbol' }}</p>
+        </div>
+      </div>
+  
+      <!-- <button *ngIf="visibleRings.length < rings.length" (click)="loadMore()" class="load-more-btn">
+        Load More
+      </button> -->
+    </section>
+</main>
