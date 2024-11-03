@@ -19,7 +19,7 @@ interface JwtPayloadS {
   providedIn: 'root'
 })
 export class AuthenticateService {
-  private apiUrl = "https://authenticate-saurons-ring.onrender.com"
+  private apiUrl = "https://authenticate-saurons-ring.onrender.com/users"
 
   constructor(private http: HttpClient) { }
 

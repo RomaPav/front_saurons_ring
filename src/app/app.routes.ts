@@ -12,7 +12,6 @@ import { EditTradeLotComponent } from './components/edit-trade-lot/edit-trade-lo
 export const routes: Routes = [
     // { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: '', component: LoginComponent },
-    { path: '/', component: LoginComponent },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegistryComponent },
     // { path: 'user-home', component: UserHomeComponent, canActivate: [AuthGuard], data: { role: 'User' } },
