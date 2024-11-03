@@ -36,36 +36,41 @@ export class ProfileComponent {
 
   saveChanges() {
     console.log(this.user)
-    const userRequest = {
-      "id": this.user.id,
-      "role": this.user.role,
-      "login": this.user.login,
-      "email": this.user.email,
-      "password": this.user.password,
-      "full_name": this.user.fullName,
-    }
-    console.log(userRequest)
-     if (this.user.password.length >= 8){
-      this.userService.update(userRequest).subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: (error) => {
-          console.error('Помилка входу', error);
-        },
-        complete: () => {
-          console.log('Запит завершено');
-        }
-      });
-      this.originalUser = { ...this.user }; 
-      this.hasChanges = false; 
-      alert('Зміни збережено!'); 
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem("user", JSON.stringify(this.user))
+    if(this.user !=null){
+      const userRequest = {
+        "id": this.user.id,
+        "role": this.user.role,
+        "login": this.user.login,
+        "email": this.user.email,
+        "password": this.user.password,
+        "full_name": this.user.fullName,
       }
-     }else{
-      alert('Заповніть всі поля'); 
-     }
+      console.log(userRequest)
+       if (this.user.password.length >= 8){
+        this.userService.update(userRequest).subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (error) => {
+            console.error('Помилка входу', error);
+          },
+          complete: () => {
+            console.log('Запит завершено');
+          }
+        });
+        this.originalUser = { ...this.user }; 
+        this.hasChanges = false; 
+        alert('Зміни збережено!'); 
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem("user", JSON.stringify(this.user))
+        }
+       }else{
+        alert('Заповніть всі поля'); 
+       }
+    }else{
+      console.log("локал сторедж не працює")
+    }
+
   }
   getPurchasses(){
       this.orderService.getByUserId(this.user.id).subscribe({

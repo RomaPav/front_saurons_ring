@@ -75,7 +75,7 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   startAuction(tradeLot: any) {
     tradeLot.trade_status = 'started';
     const bit ={
-      "user_id": this.user.id,
+      "user_id": this.user.id==null ? 0 : this.user.id,
       "trade_lot_id": tradeLot.id,
       "amount": 1
     }
