@@ -44,11 +44,12 @@ export class OwnerHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     this.getCoins()
   }
   ngAfterViewInit() {
-    this.intervalId = setInterval(() => {
-      this.getPrice();
-    }, 1000);
-    this.destroy$.next();
-    this.destroy$.complete();
+    // this.intervalId = setInterval(() => {
+    //   this.getPrice();
+    // }, 1000);
+    // this.destroy$.next();
+    // this.destroy$.complete();
+    this.getPrice();
   }
   ngOnDestroy(): void {
     if (this.intervalId) {

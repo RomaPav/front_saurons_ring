@@ -43,9 +43,10 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     this.getCoins()
   }
   ngAfterViewInit() {
-    this.intervalId = setInterval(() => {
-      this.getPrice();
-    }, 1000);
+    // this.intervalId = setInterval(() => {
+    //   this.getPrice();
+    // }, 1000);
+    this.getPrice();
   }
   ngOnDestroy(): void {
     if (this.intervalId) {

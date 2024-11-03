@@ -33,15 +33,16 @@ export class ActionComponent implements OnInit, OnDestroy {
     if (this.auctionId){
       this.getTradeInfo(parseInt(this.auctionId));
     }
-    this.intervalIdPrice = setInterval(()=>{
-      this.getPrice()
-    }, 1000)
-    this.intervalId = setInterval(() => {
-      if (this.auctionId){
-        this.getTradeInfo(parseInt(this.auctionId));
-      }
-    }, 5000);
-
+    // this.intervalIdPrice = setInterval(()=>{
+    //   this.getPrice()
+    // }, 1000)
+    this.getPrice()
+    // this.intervalId = setInterval(() => {
+    //   if (this.auctionId){
+    //     this.getTradeInfo(parseInt(this.auctionId));
+    //   }
+    // }, 5000);
+    // this.getTradeInfo(parseInt(this.auctionId));
   }
 
   ngOnDestroy(): void {
