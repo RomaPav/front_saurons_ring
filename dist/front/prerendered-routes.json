@@ -1,0 +1,12 @@
+{
+  "routes": [
+    "/",
+    "/admin-home",
+    "/create-lot",
+    "/login",
+    "/owner-home",
+    "/profile",
+    "/register",
+    "/user-home"
+  ]
+}
