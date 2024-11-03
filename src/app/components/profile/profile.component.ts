@@ -73,6 +73,7 @@ export class ProfileComponent {
 
   }
   getPurchasses(){
+    if(this.user !=null){
       this.orderService.getByUserId(this.user.id).subscribe({
         next: (response) => {
           console.log(response)
@@ -85,5 +86,8 @@ export class ProfileComponent {
           console.log('Запит завершено');
         }
       });
+    }else{
+      console.log('локал сторедж не прарцює');
+    }
   }
 }

@@ -1,6 +1,6 @@
 <div class="container">
     <h2>Профіль</h2>
-    <form>
+    <form *ngIf="user != null">
       <div>
         <label for="fullName">Повне ім'я:</label>
         <input type="text" id="fullName" [(ngModel)]="user.fullName" name="fullName" (ngModelChange)="onChanges()" required/>
