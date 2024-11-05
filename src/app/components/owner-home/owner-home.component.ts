@@ -45,7 +45,7 @@ export class OwnerHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   
 
   ngOnInit() {
-    // this.getCoins()
+    this.getCoins();
     this.subscription = this.priceWebSocketService.getPriceUpdates().subscribe({
       next: (data) => {
         this.cuurentGoldPrice = data.gold;
