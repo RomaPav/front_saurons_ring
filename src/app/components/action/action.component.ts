@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { PriceService } from '../../services/price.service';
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
+import { PriceWebSocketService } from '../../services/price-web-socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-action',
@@ -25,8 +27,10 @@ export class ActionComponent implements OnInit, OnDestroy {
   cuurentGoldPrice = 0;
   cuurentSilverPrice = 0;
   cuurentBronzePrice = 0;
+  private subscription!: Subscription;
 
-  constructor(private route: ActivatedRoute, private bitService: BitService, private router: Router,private coinService: CoinService, private priceService: PriceService, @Inject(PLATFORM_ID) private platformId: Object) { }
+  constructor(private route: ActivatedRoute, private bitService: BitService, private router: Router,private coinService: CoinService, private priceService: PriceService, @Inject(PLATFORM_ID) private platformId: Object,
+  private priceWebSocketService: PriceWebSocketService) { }
 
   ngOnInit(): void {
     this.auctionId = this.route.snapshot.paramMap.get('id');
@@ -36,22 +40,32 @@ export class ActionComponent implements OnInit, OnDestroy {
     // this.intervalIdPrice = setInterval(()=>{
     //   this.getPrice()
     // }, 1000)
-    this.getPrice()
+    // this.getPrice()
     // this.intervalId = setInterval(() => {
     //   if (this.auctionId){
     //     this.getTradeInfo(parseInt(this.auctionId));
     //   }
     // }, 5000);
     // this.getTradeInfo(parseInt(this.auctionId));
+    this.subscription = this.priceWebSocketService.getPriceUpdates().subscribe({
+      next: (data) => {
+        this.cuurentGoldPrice = data.gold;
+        this.cuurentSilverPrice = data.silver;
+        this.cuurentBronzePrice = data.bronze;
+      },
+      error: (err) => console.error('WebSocket error:', err),
+    });
   }
 
   ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
-    if(this.intervalIdPrice){
-      clearInterval(this.intervalIdPrice)
-    }
+    // if (this.intervalId) {
+    //   clearInterval(this.intervalId);
+    // }
+    // if(this.intervalIdPrice){
+    //   clearInterval(this.intervalIdPrice)
+    // }
+    this.subscription.unsubscribe();
+    this.priceWebSocketService.closeConnection();
   }
 
   getTradeInfo(id: Number){  

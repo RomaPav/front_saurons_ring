@@ -5,6 +5,8 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { TradeLotService } from '../../services/trade-lot.service';
 import { Router } from '@angular/router';
 import { PriceService } from '../../services/price.service';
+import { PriceWebSocketService } from '../../services/price-web-socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-home',
@@ -22,12 +24,14 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   private intervalId: any;
   user: any = null;
   chart: any;
+  private subscription!: Subscription;
 
   constructor(private elementRef: ElementRef,
      @Inject(PLATFORM_ID) platformId: Object, 
      traadeLotService: TradeLotService,
      private router: Router,
-    private priceService: PriceService) {
+    private priceService: PriceService,
+    private priceWebSocketService: PriceWebSocketService) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.tradeLotService = traadeLotService;
     if (isPlatformBrowser(platformId)) {
@@ -41,6 +45,14 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
 
   ngOnInit() {
     this.getCoins()
+    this.subscription = this.priceWebSocketService.getPriceUpdates().subscribe({
+      next: (data) => {
+        this.cuurentGoldPrice = data.gold;
+        this.cuurentSilverPrice = data.silver;
+        this.cuurentBronzePrice = data.bronze;
+      },
+      error: (err) => console.error('WebSocket error:', err),
+    });
   }
   ngAfterViewInit() {
     // this.intervalId = setInterval(() => {
@@ -55,6 +67,8 @@ export class UserHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     if (this.chart) {
       this.chart.destroy();
     }
+    this.subscription.unsubscribe();
+    this.priceWebSocketService.closeConnection();
   }
 
 

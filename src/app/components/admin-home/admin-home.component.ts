@@ -7,6 +7,8 @@ import { TradeLotService } from '../../services/trade-lot.service';
 import { PriceService } from '../../services/price.service';
 import { BitService } from '../../services/bit.service';
 import { OrderService } from '../../services/order.service';
+import { PriceWebSocketService } from '../../services/price-web-socket.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-home',
@@ -25,13 +27,15 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   cuurentBronzePrice = 0;
   private intervalId: any;
   user : any = null;
+  private subscription!: Subscription;
 
   constructor(@Inject(PLATFORM_ID) platformId: Object,
       coinService: CoinService,
       traadeLotService: TradeLotService, 
       private priceService: PriceService,
       private bitService: BitService,
-      private orderService:OrderService) {
+      private orderService:OrderService,
+      private priceWebSocketService: PriceWebSocketService) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.coinService = coinService
     this.tradeLotService = traadeLotService
@@ -45,7 +49,15 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
   
 
   ngOnInit() {
-    this.getCoins()
+    // this.getCoins()
+    this.subscription = this.priceWebSocketService.getPriceUpdates().subscribe({
+      next: (data) => {
+        this.cuurentGoldPrice = data.gold;
+        this.cuurentSilverPrice = data.silver;
+        this.cuurentBronzePrice = data.bronze;
+      },
+      error: (err) => console.error('WebSocket error:', err),
+    });
   }
   ngAfterViewInit() {
     // this.createChart();
@@ -55,9 +67,11 @@ export class AdminHomeComponent implements OnInit, OnDestroy, AfterViewInit{
     this.getPrice();
   }
   ngOnDestroy(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    // if (this.intervalId) {
+    //   clearInterval(this.intervalId);
+    // }
+    this.subscription.unsubscribe();
+    this.priceWebSocketService.closeConnection();
   }
   getCoins(){  
     this.tradeLotService.getStarted().subscribe({
